@@ -14,6 +14,28 @@ function App() {
     units: 2
   }]);
 
+
+  const findProductIndex = (cart, productsId) => {
+    return cart.findIndex(p => p.id === productsId);
+  }
+
+  const updateProductUnits = (cart, product) => {
+    const productIndex = findProductIndex(cart, product.id);
+
+    const updatedProducts = [...cart]
+    const existingProduct = updatedProducts[productIndex];
+
+    const updatedUnitsProduct = {
+      ...existingProduct,
+      units: existingProduct.units + product.units 
+    };
+
+    updatedProducts[productIndex] = updatedUnitsProduct;
+
+    return updatedProducts;
+
+  }
+
   const handleAddFunc = (product) => {
     // const existingProduct = cart.filter(p => p.id === product.id);
 
@@ -22,21 +44,9 @@ function App() {
 
     //   const updatedUnitsProduct = {...existingProduct[0], units: existingProduct[0].units + product.units}
     //   setCart([...withoutExistingProduct, updatedUnitsProduct])
-    const existingProductIndex = cart.findIndex(p => p.id === product.id);
+    const existingProductIndex = findProductIndex(cart, product.id)
 
-    if(existingProductIndex >= 0){
-      const cartProducts = cart.slice();
-
-      const existingProduct = cartProducts[existingProductIndex];
-
-      const updatedUnitsProduct = {...existingProduct, units: existingProduct.units + product.units};
-
-      cartProducts[existingProductIndex] = updatedUnitsProduct;
-
-      setCart(cartProducts)
-    }else{
-      setCart([...cart, product])
-    }
+      setCart(existingProductIndex >= 0 ? updateProductUnits(cart, product) : [...cart] )
   }
   return (
     <main className="pa3 pa5-ns flex flex-wrap">
