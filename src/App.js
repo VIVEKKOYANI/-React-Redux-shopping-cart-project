@@ -52,13 +52,25 @@ function App() {
   }]);
 
   const handleAddFunc = (product) => {
-    const existingProduct = cart.filter(p => p.id === product.id);
+    // const existingProduct = cart.filter(p => p.id === product.id);
 
-    if(existingProduct.length > 0){
-      const withoutExistingProduct = cart.filter(p => p.id !== product.id);
+    // if(existingProduct.length > 0){
+    //   const withoutExistingProduct = cart.filter(p => p.id !== product.id);
 
-      const updatedUnitsProduct = {...existingProduct[0], units: existingProduct[0].units + product.units}
-      setCart([...withoutExistingProduct, updatedUnitsProduct])
+    //   const updatedUnitsProduct = {...existingProduct[0], units: existingProduct[0].units + product.units}
+    //   setCart([...withoutExistingProduct, updatedUnitsProduct])
+    const existingProductIndex = cart.findIndex(p => p.id === product.id);
+
+    if(existingProductIndex >= 0){
+      const cartProducts = cart.slice();
+
+      const existingProduct = cartProducts[existingProductIndex];
+
+      const updatedUnitsProduct = {...existingProduct, units: existingProduct.units + product.units};
+
+      cartProducts[existingProductIndex] = updatedUnitsProduct;
+
+      setCart(cartProducts)
     }else{
       setCart([...cart, product])
     }
